@@ -73,20 +73,27 @@ function fill_field( i, j, bomb ){
     
     let retorno = 0;
 
+    console.log( bomb )
+
     bomb.forEach( pBomb => {
 
-        if( pBomb[0] == i && pBomb[1] == j ){
-            retorno = "boom";
-        }
-
-        if(
-            ( ( i == ( pBomb[0] - 1 ) ) && ( j == ( pBomb[1] - 1 ) ) ) ||
-            ( ( i == ( pBomb[0] - 1 ) ) && ( j == ( pBomb[1] - 1 ) ) ) ||
-            ( ( i == ( pBomb[0] + 1 ) ) && ( j == ( pBomb[1] - 1 ) ) ) ||
-            ( ( i == ( pBomb[0] + 1 ) ) && ( j == ( pBomb[1] - 1 ) ) )
+        if( pBomb[0] == j && pBomb[1] == i ){
+            retorno = "b";
+        }else if(
+            ( ( j == ( pBomb[0] - 1 ) ) && ( i == ( pBomb[1] - 1 ) ) ) ||
+            ( ( j == ( pBomb[0] - 1 ) ) && ( i == ( pBomb[1] - 1 ) ) ) ||
+            ( ( j == ( pBomb[0] + 1 ) ) && ( i == ( pBomb[1] - 1 ) ) ) ||
+            ( ( j == ( pBomb[0] + 1 ) ) && ( i == ( pBomb[1] - 1 ) ) ) ||
+            ( ( j == ( pBomb[0] - 1 ) ) && ( i == ( pBomb[1] + 1 ) ) ) ||
+            ( ( j == ( pBomb[0] - 1 ) ) && ( i == ( pBomb[1] + 1 ) ) ) ||
+            ( ( j == ( pBomb[0] + 1 ) ) && ( i == ( pBomb[1] + 1 ) ) ) ||
+            ( ( j == ( pBomb[0] + 1 ) ) && ( i == ( pBomb[1] + 1 ) ) ) ||
+            ( ( j == ( pBomb[0] - 1 ) ) && ( i == pBomb[1] ) ) ||
+            ( ( j == ( pBomb[0] + 1 ) ) && ( i == pBomb[1] ) ) ||
+            ( ( j == pBomb[0] ) && ( i == ( pBomb[1] - 1 ) ) ) ||
+            ( ( j == pBomb[0] ) && ( i == ( pBomb[1] + 1 ) ) )
         ){
-            console.log( "correto", i, j,  )
-            retorno++;  
+            retorno++;
         }
 
     } )
