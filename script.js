@@ -33,7 +33,36 @@ function create_bombs( bombs ){
 
     } 
 
-    fill_with_number_bombs( positions )
+    let matGame = fill_with_number_bombs( positions );
+    let pos = 0;
+
+    matGame.forEach( ( line, key1 ) => {
+        line.forEach( ( val, key2 ) => {
+            
+            if( val == "b" ){
+                allSlots[pos].dataset.value = "BOMBA"
+            }else{
+                allSlots[pos].dataset.value = val;
+            }
+
+            allSlots[pos].dataset.position = key1+","+key2;
+
+            pos++;
+        } )
+    } )
+
+    allSlots.forEach( slot => {
+    
+        slot.innerHTML = "";
+
+        slot.addEventListener( 'click', function( e ){
+            e.preventDefault();
+
+            slot.innerHTML = slot.dataset.value;
+            show_parent_slots( slot.dataset.position, matGame, allSlots );
+            
+        } )
+    } )
 
 }
 
@@ -65,15 +94,13 @@ function fill_with_number_bombs( bombs ){
         }
     }
 
-    console.log( mat )
+    return mat;
 
 }
 
 function fill_field( i, j, bomb ){
     
     let retorno = 0;
-
-    console.log( bomb )
 
     bomb.forEach( pBomb => {
 
@@ -98,5 +125,25 @@ function fill_field( i, j, bomb ){
 
     } )
     return retorno;
+
+}
+
+function show_parent_slots( position, game, elements ){
+
+    let positionClick = position.split( "," );
+    
+    elements.forEach( element => {
+
+        let atualPosition = element.dataset.position.split( "," );
+        if(
+            atualPosition[0] == ( positionClick[0] + 1 ) && ( ( atualPosition[1] == positionClick[1] ) || ( atualPosition[1] == ( positionClick[1] - 1 ) ) || ( atualPosition[1] == ( positionClick[1] + 1 ) ) ) || 
+            atualPosition[0] == ( positionClick[0] - 1 ) && ( ( atualPosition[1] == positionClick[1] ) || ( atualPosition[1] == ( positionClick[1] - 1 ) ) || ( atualPosition[1] == ( positionClick[1] + 1 ) ) ) || 
+            atualPosition[1] == ( positionClick[1] + 1 ) && ( ( atualPosition[0] == positionClick[0] ) || ( atualPosition[0] == ( positionClick[0] - 1 ) ) || ( atualPosition[0] == ( positionClick[0] + 1 ) ) ) || 
+            atualPosition[1] == ( positionClick[1] - 1 ) && ( ( atualPosition[0] == positionClick[0] ) || ( atualPosition[0] == ( positionClick[0] - 1 ) ) || ( atualPosition[0] == ( positionClick[0] + 1 ) ) )
+        ){
+            element.innerHTML = element.dataset.value;
+        }
+
+    } )
 
 }
