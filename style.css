@@ -1,0 +1,35 @@
+header{
+    box-shadow: 0 0 0.3em #ccc;
+    padding: 15px;
+}
+#sidebar-campo-minado{
+    background-color: b7b7b7;
+    border: solid;
+    border-width: 0px 0px 0px 1px;
+}
+#c-campo-minado{
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr); /* Cria 8 colunas com largura igual */
+    grid-template-rows: repeat(8, 1fr); /* Cria 8 linhas com altura igual */
+    gap: 5px;
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+#c-campo-minado .c-slot-game{
+    background-color: #ccc;
+    height: 80px;
+}
+#sidebar-campo-minado{
+    position: relative;
+}
+#sidebar-campo-minado button{
+    background-color: rgb(10, 232, 43);
+    color: #252525;
+    width: 100%;
+    border: none;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 12px;
+}
