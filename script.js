@@ -1,3 +1,15 @@
+const cMinuts = document.getElementById( "c-minuts-crono" );
+const cSeconds = document.getElementById( "c-seconds-crono" );
+const cTotalPoints = document.getElementById( "total-points" );
+const cResultGame = document.getElementById( "result-game" );
+const cPopup = document.getElementById( "c-popup" );
+const cTypeEnd = document.querySelector( "#c-popup #result-game" );
+const btnRestart = document.getElementById( "btn-restart-game" );
+const cTimeResult = document.getElementById( "c-result-time-game" );
+const cPontuation = document.getElementById( "c-pontuacao-game" );
+
+var countTime = null;
+
 function initialize_game(){
     
     const select = document.getElementById( "select-bombs" );
@@ -8,7 +20,10 @@ function initialize_game(){
         return;
     }
 
-    create_bombs( selectBomb )
+    countTime = null;
+
+    create_bombs( selectBomb );
+    initialize_cronometer(  )
 
 }
 
@@ -33,7 +48,54 @@ function create_bombs( bombs ){
 
     } 
 
-    fill_with_number_bombs( positions )
+    let matGame = fill_with_number_bombs( positions );
+    let pos = 0;
+
+    matGame.forEach( ( line, key1 ) => {
+        line.forEach( ( val, key2 ) => {
+            
+            if( val == "b" ){
+                allSlots[pos].dataset.value = "💣"                
+            }else{
+                allSlots[pos].dataset.value = val;
+            }
+
+            allSlots[pos].dataset.position = key2+","+key1;
+
+            pos++;
+        } )
+    } )
+
+    let totalPoints = 0;
+
+    allSlots.forEach( slot => {
+    
+        slot.innerHTML = "";
+        slot.style.backgroundColor = "#ccc"
+
+        slot.addEventListener( 'click', function( e ){
+            e.preventDefault();
+
+            slot.innerHTML = slot.dataset.value;
+            show_parent_slots( slot.dataset.position, matGame, allSlots );
+            
+            if( slot.dataset.value == "💣" ){
+
+                slot.style.backgroundColor = "red";
+
+                setTimeout( function(){
+                    show_end_game( true );
+                }, 500 )
+
+            }else{
+
+                totalPoints++;
+                cTotalPoints.value = totalPoints;
+
+            }
+            
+        } )
+    } )
 
 }
 
@@ -65,15 +127,13 @@ function fill_with_number_bombs( bombs ){
         }
     }
 
-    console.log( mat )
+    return mat;
 
 }
 
 function fill_field( i, j, bomb ){
     
     let retorno = 0;
-
-    console.log( bomb )
 
     bomb.forEach( pBomb => {
 
@@ -93,10 +153,98 @@ function fill_field( i, j, bomb ){
             ( ( j == pBomb[0] ) && ( i == ( pBomb[1] - 1 ) ) ) ||
             ( ( j == pBomb[0] ) && ( i == ( pBomb[1] + 1 ) ) )
         ){
-            retorno++;
+            if( !( retorno == "b" ) )
+                retorno++;
         }
 
     } )
     return retorno;
+
+}
+
+function show_parent_slots( position, game, elements ){
+
+    let positionClick = position.split( "," );
+    positionClick[0] = parseInt( positionClick[0] );
+    positionClick[1] = parseInt( positionClick[1] );
+    
+    elements.forEach( element => {        
+
+        let atualPosition = element.dataset.position.split( "," );
+        atualPosition[0] = parseInt( atualPosition[0] );
+        atualPosition[1] = parseInt( atualPosition[1] );
+
+        if( 
+            ( atualPosition[0] == positionClick[0] ) && ( atualPosition[1] == ( positionClick[1] + 1 ) ) || 
+            ( atualPosition[0] == positionClick[0] ) && ( atualPosition[1] == ( positionClick[1] - 1 ) )
+        ){
+            console.log( atualPosition[0], atualPosition[1], atualPosition[1] + 1 );
+        }
+
+        if(
+            ( atualPosition[0] == ( positionClick[0] + 1 ) ) && ( atualPosition[1] == positionClick[1] ) || 
+            ( atualPosition[0] == ( positionClick[0] - 1 ) ) && ( atualPosition[1] == positionClick[1] ) || 
+            ( atualPosition[0] == positionClick[0] ) && ( atualPosition[1] == ( positionClick[1] + 1 ) ) || 
+            ( atualPosition[0] == positionClick[0] ) && ( atualPosition[1] == ( positionClick[1] - 1 ) ) || 
+            ( atualPosition[0] == ( positionClick[0] - 1 ) ) && ( atualPosition[1] == ( positionClick[1] - 1 ) ) || 
+            ( atualPosition[0] == ( positionClick[0] + 1 ) ) && ( atualPosition[1] == ( positionClick[1] - 1 ) ) || 
+            ( atualPosition[0] == ( positionClick[0] - 1 ) ) && ( atualPosition[1] == ( positionClick[1] + 1 ) ) || 
+            ( atualPosition[0] == ( positionClick[0] + 1 ) ) && ( atualPosition[1] == ( positionClick[1] + 1 ) )
+            
+        ){
+            if( ! ( element.dataset.value == "💣" ) )
+                element.innerHTML = element.dataset.value;                
+        }
+
+    } )
+
+}
+
+var time = 0;
+function initialize_cronometer(  ){
+
+    countTime = setInterval( function(){
+
+        let minute = Math.floor( time/60 );
+        let second = time - minute;
+
+        cMinuts.value = minute;
+        cSeconds.value = second;
+
+        time++;
+    }, 1000 );
+
+}
+
+function show_end_game( type ){
+
+    btnRestart.addEventListener( "click", function( e ){
+        e.preventDefault();
+
+        location.reload();
+
+    } )
+
+    let min = Math.floor( time/60 );
+    let max = time - min;
+
+    min = min < 10 ? "0"+min : min;
+    max = max < 10 ? "0"+max : max;
+
+
+    cTimeResult.innerHTML = min + ":" + max;
+    cPontuation.innerHTML = cTotalPoints.value;
+
+    if( type ){
+        cPopup.style.display = "flex";
+
+        cTypeEnd.innerHTML = "perdeu";
+        cTypeEnd.style.color = "red";
+        return;
+
+    }
+
+    cTypeEnd.innerHTML = "ganhou";
+    cTypeEnd.style.color = "green";
 
 }

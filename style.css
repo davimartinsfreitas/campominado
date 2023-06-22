@@ -14,12 +14,22 @@ header{
     grid-template-rows: repeat(8, 1fr); /* Cria 8 linhas com altura igual */
     gap: 5px;
     width: 70%;
+    height: calc( 100% - 20% );
     margin-left: 15%;
     margin-right: 15%;
 }
 #c-campo-minado .c-slot-game{
     background-color: #ccc;
     height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3em;
+    font-weight: bold;
+    cursor: pointer;
+    border: solid;
+    border-color: #25252572;
+    border-radius: 12px;
 }
 #sidebar-campo-minado{
     position: relative;
@@ -32,4 +42,34 @@ header{
     padding: 10px;
     font-weight: bold;
     border-radius: 12px;
+}
+#timer-count{
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+#timer-count .c-input-time{
+    width: 30%;
+}
+#sidebar-campo-minado form label{
+    font-weight: bold;
+}
+
+#c-popup{
+    background-color: #25252577;
+    position: fixed;
+    height: 100%;
+    width: 100vw;
+    margin-top: -15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.popup{    
+    width: 70%;
+    background-color: white;
+    box-shadow: 0 0 0.5em #ccc;
+    padding: 15px;
+    margin: 0% 15%;
+    border-radius: 20px;
 }
